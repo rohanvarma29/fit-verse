@@ -1,0 +1,73 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: inherit;
+  }
+  .form-input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm
+           focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 
+           transition-all duration-200 shadow-sm hover:border-primary/50;
+  }
+  .btn-primary {
+    @apply w-full bg-primary text-white py-3 rounded-lg 
+           hover:bg-primary/90 active:scale-[0.99] 
+           transition-all duration-200 font-medium shadow-sm
+           hover:shadow-md hover:shadow-primary/20;
+  }
+  .text-link {
+    @apply text-primary hover:text-primary/80 transition-colors duration-200 
+           relative after:absolute after:left-0 after:bottom-0 after:w-full 
+           after:h-px after:origin-right after:scale-x-0 after:bg-primary/40
+           hover:after:origin-left hover:after:scale-x-100 after:transition-transform;
+  }
+  .auth-container {
+    @apply relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 
+           bg-gradient-to-br from-accent-light via-white to-accent-muted 
+           bg-auth-pattern bg-fixed;
+  }
+  .auth-card {
+    @apply max-w-md w-full space-y-8 animate-fade-in bg-white/70 
+           backdrop-blur-xl p-8 rounded-2xl shadow-xl 
+           shadow-black/[0.03] border border-black/[0.05];
+  }
+  .form-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  .form-error {
+    @apply text-destructive text-xs font-medium;
+  }
+  .input-group {
+    @apply mt-1 relative;
+  }
+  .input-icon {
+    @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none 
+           text-gray-400 transition-colors group-focus-within:text-primary;
+  }
+  .password-toggle {
+    @apply absolute inset-y-0 right-0 pr-3 flex items-center 
+           text-gray-400 hover:text-gray-600 transition-colors;
+  }
+}
