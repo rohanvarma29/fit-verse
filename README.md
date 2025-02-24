@@ -47,6 +47,7 @@ AI Tools:
 
 - Lovable AI - Development assistance and code generation
 - Lovable Tagger - Component tagging and organization
+- Amazon Q Developer
 
 ## How can I deploy this project?
 
