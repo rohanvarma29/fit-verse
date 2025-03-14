@@ -1,36 +1,74 @@
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { loginUser } from "@/lib/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
-    
+
     if (!email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Please enter a valid email";
     }
-    
+
     if (!password) {
       newErrors.password = "Password is required";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle login logic here
-      console.log("Login attempt with:", { email, password });
+      try {
+        const response = await loginUser(email, password);
+
+        if (response.success) {
+          // Store token in localStorage
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data));
+          console.log("User logged in:", response.data);
+
+          // Show success message
+          toast({
+            title: "Success!",
+            description: response.message,
+            variant: "default",
+          });
+
+          // Redirect to dashboard
+          navigate("/dashboard");
+        } else {
+          // Show error message
+          toast({
+            title: "Error",
+            description: response.error,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        // Show generic error message
+        toast({
+          title: "Error",
+          description: "An error occurred while logging in. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 

@@ -1,9 +1,12 @@
-
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { registerUser } from "@/lib/api";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,31 +20,31 @@ const Register = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = "Last name is required";
     }
-    
+
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
-    
+
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -54,14 +57,37 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle registration logic here
-      console.log("Registration attempt with:", formData);
+      try {
+        const response = await registerUser(formData); // Assuming this is your API call
+
+        // Check if response exists and is valid
+        if (response && response.success) {
+          toast({
+            title: "Success",
+            description: response.message || "Registration successful",
+            variant: "default",
+          });
+          navigate("/login");
+        } else {
+          toast({
+            title: "Error",
+            description: response?.error || "Registration failed",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Registration error:", error);
+        toast({
+          title: "Error",
+          description: "Registration failed. Please try again later.",
+          variant: "destructive",
+        });
+      }
     }
   };
-
   return (
     <div className="auth-container">
       <div className="auth-card">
