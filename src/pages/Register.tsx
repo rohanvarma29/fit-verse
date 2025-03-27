@@ -61,9 +61,8 @@ const Register = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await registerUser(formData); // Assuming this is your API call
+        const response = await registerUser(formData);
 
-        // Check if response exists and is valid
         if (response && response.success) {
           toast({
             title: "Success",
@@ -91,22 +90,18 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        {/* Header */}
         <div className="text-center">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-            Create an account
+            Become a FitVerse Expert
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Join our community of skill-sharers
+            Join our community of fitness and wellness professionals
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
-            {/* Name Fields */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {/* First Name */}
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="firstName" className="form-label">
@@ -134,7 +129,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Last Name */}
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="lastName" className="form-label">
@@ -163,7 +157,6 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Email */}
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="email" className="form-label">
@@ -191,7 +184,6 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="form-label">
@@ -230,7 +222,6 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Confirm Password */}
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="confirmPassword" className="form-label">
@@ -271,11 +262,11 @@ const Register = () => {
           </div>
 
           <button type="submit" className="btn-primary">
-            Create Account
+            Create Expert Account
           </button>
 
           <p className="text-center text-sm">
-            Already have an account?{" "}
+            Already have an expert account?{" "}
             <Link to="/login" className="text-link">
               Sign in
             </Link>

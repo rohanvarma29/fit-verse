@@ -39,22 +39,18 @@ const Login = () => {
         const response = await loginUser(email, password);
 
         if (response.success) {
-          // Store token in localStorage
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("user", JSON.stringify(response.data));
           console.log("User logged in:", response.data);
 
-          // Show success message
           toast({
             title: "Success!",
             description: response.message,
             variant: "default",
           });
 
-          // Redirect to dashboard
           navigate("/dashboard");
         } else {
-          // Show error message
           toast({
             title: "Error",
             description: response.error,
@@ -62,7 +58,6 @@ const Login = () => {
           });
         }
       } catch (error) {
-        // Show generic error message
         toast({
           title: "Error",
           description: "An error occurred while logging in. Please try again.",
@@ -75,20 +70,17 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        {/* Header */}
         <div className="text-center">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-            Welcome back
+            FitVerse Expert Login
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to continue to your account
+            Sign in to access your expert dashboard
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
-            {/* Email */}
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="email" className="form-label">
@@ -117,7 +109,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="form-label">
@@ -171,9 +162,9 @@ const Login = () => {
           </button>
 
           <p className="text-center text-sm">
-            Don't have an account?{" "}
+            Not registered as an expert yet?{" "}
             <Link to="/register" className="text-link">
-              Create an account
+              Create an expert account
             </Link>
           </p>
         </form>

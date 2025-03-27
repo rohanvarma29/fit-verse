@@ -1,11 +1,15 @@
-# Welcome to skill-sphere-web
+
+# Welcome to FitVerse - Fitness & Wellness Platform
 
 ## About
 
-SkillSphere is a user-centric platform that brings students, professionals, and enthusiasts together to share knowledge and learn from one another—completely on their own terms.
-Whether you're looking to learn a new skill, brush up on academic subjects, or tutor others for personal or professional growth, SkillSphere provides the tools you need in a seamless, engaging, and secure environment.
+FitVerse is a platform that connects users with certified fitness trainers, nutritionists, and yoga instructors. Whether you're looking to get in shape, improve your nutrition, or find inner peace through yoga, FitVerse provides the perfect match for your wellness journey.
 
-Whether you're a high school student looking for homework help, a college peer wanting to master advanced topics, or a professional aiming to keep skills fresh, SkillSphere is your all-in-one solution for frictionless, rewarding learning experiences.
+Our platform offers:
+- Access to certified fitness and wellness professionals
+- Personalized training and nutrition plans
+- Flexible scheduling options for sessions
+- Both virtual and in-person training opportunities
 
 ## Project info
 
