@@ -87,14 +87,15 @@ const Register = () => {
       }
     }
   };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="text-center">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">
             Become a FitVerse Expert
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gunmetal/70">
             Join our community of fitness and wellness professionals
           </p>
         </div>
@@ -265,7 +266,7 @@ const Register = () => {
             Create Expert Account
           </button>
 
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-gunmetal/70">
             Already have an expert account?{" "}
             <Link to="/login" className="text-link">
               Sign in

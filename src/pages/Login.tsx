@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
@@ -71,10 +72,10 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="text-center">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">
             FitVerse Expert Login
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gunmetal/70">
             Sign in to access your expert dashboard
           </p>
         </div>
@@ -161,7 +162,7 @@ const Login = () => {
             Sign in
           </button>
 
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-gunmetal/70">
             Not registered as an expert yet?{" "}
             <Link to="/register" className="text-link">
               Create an expert account

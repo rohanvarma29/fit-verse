@@ -34,15 +34,22 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        // New FitVerse color palette
+        gunmetal: "#002A32",
+        alabaster: "#F1F2EB",
+        timberwolf: "#D8DAD3",
+        cambridge: "#A4C2A5",
+        
         primary: {
-          DEFAULT: "#007AFF",
+          DEFAULT: "#A4C2A5", // Cambridge Blue as primary
           foreground: "#FFFFFF",
-          light: "#E5F1FF",
+          light: "#E8F0E9", // Lighter version of Cambridge Blue
         },
         accent: {
-          light: "#F5F5F7",
-          dark: "#1D1D1F",
-          muted: "#F8F8FA",
+          light: "#F1F2EB", // Alabaster
+          dark: "#002A32", // Gunmetal
+          muted: "#D8DAD3", // Timberwolf
         },
         destructive: {
           DEFAULT: "#FF3B30",
