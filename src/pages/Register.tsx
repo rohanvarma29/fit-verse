@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Form steps
 const steps = [
@@ -20,6 +21,7 @@ const steps = [
 const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     // Personal Info
@@ -761,7 +763,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="bg-gunmetal text-alabaster w-full md:w-2/5 p-8 flex flex-col justify-center fixed md:h-screen left-0 top-0">
+      <div className={`bg-gunmetal text-alabaster ${isMobile ? 'w-full relative' : 'w-full md:w-2/5 fixed md:h-screen left-0 top-0'} p-8 flex flex-col justify-center`}>
         <div className="max-w-md mx-auto space-y-6">
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">
             Become a FitVerse Expert
@@ -805,7 +807,7 @@ const Register = () => {
         </div>
       </div>
       
-      <div className="bg-alabaster w-full md:w-3/5 min-h-screen md:ml-[40%]">
+      <div className={`bg-alabaster w-full ${isMobile ? 'mt-0' : 'md:w-3/5 md:ml-[40%]'} `}>
         <ScrollArea className="h-screen p-6 md:p-8 lg:p-12">
           <div className="w-full max-w-2xl mx-auto space-y-8 pb-8">
             <div className="space-y-2">
