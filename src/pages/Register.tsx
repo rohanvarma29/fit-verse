@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +6,7 @@ import { registerUser } from "@/lib/api";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Form steps
 const steps = [
@@ -216,7 +216,6 @@ const Register = () => {
 
   const handleSubmit = async () => {
     try {
-      // In a real application, we would update the API call to handle the new form structure
       const response = await registerUser(formData);
 
       if (response && response.success) {
@@ -243,7 +242,6 @@ const Register = () => {
     }
   };
 
-  // Render the current step form
   const renderStepContent = () => {
     const currentStepId = steps[currentStep].id;
 
@@ -763,8 +761,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Left Column - Banner */}
-      <div className="bg-gunmetal text-alabaster w-full md:w-2/5 p-8 flex flex-col justify-center">
+      <div className="bg-gunmetal text-alabaster w-full md:w-2/5 p-8 flex flex-col justify-center fixed md:h-screen left-0 top-0">
         <div className="max-w-md mx-auto space-y-6">
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">
             Become a FitVerse Expert
@@ -808,56 +805,56 @@ const Register = () => {
         </div>
       </div>
       
-      {/* Right Column - Form */}
-      <div className="bg-alabaster w-full md:w-3/5 p-6 md:p-8 lg:p-12 flex items-center justify-center overflow-y-auto">
-        <div className="w-full max-w-2xl space-y-8">
-          {/* Progress Bar */}
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs text-gunmetal/60">
-              <span>Step {currentStep + 1} of {steps.length}</span>
-              <span>{steps[currentStep].label}</span>
-            </div>
-            <Progress value={progress} className="h-2 bg-timberwolf" />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gunmetal">
-              {steps[currentStep].label}
-            </h2>
-            
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
-              {renderStepContent()}
-              
-              <div className="flex justify-between pt-4">
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className={`px-6 py-2.5 border border-timberwolf rounded-lg text-gunmetal hover:bg-timberwolf/20 transition-colors ${
-                    currentStep === 0 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  disabled={currentStep === 0}
-                >
-                  Previous
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="btn-primary max-w-xs"
-                >
-                  {currentStep === steps.length - 1 ? "Complete Setup" : "Next Step"}
-                </button>
+      <div className="bg-alabaster w-full md:w-3/5 min-h-screen md:ml-[40%]">
+        <ScrollArea className="h-screen p-6 md:p-8 lg:p-12">
+          <div className="w-full max-w-2xl mx-auto space-y-8 pb-8">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs text-gunmetal/60">
+                <span>Step {currentStep + 1} of {steps.length}</span>
+                <span>{steps[currentStep].label}</span>
               </div>
-            </form>
+              <Progress value={progress} className="h-2 bg-timberwolf" />
+            </div>
             
-            <p className="text-center text-sm text-gunmetal/70">
-              Already have an expert account?{" "}
-              <Link to="/login" className="text-link">
-                Sign in
-              </Link>
-            </p>
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold text-gunmetal">
+                {steps[currentStep].label}
+              </h2>
+              
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
+                {renderStepContent()}
+                
+                <div className="flex justify-between pt-4">
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className={`px-6 py-2.5 border border-timberwolf rounded-lg text-gunmetal hover:bg-timberwolf/20 transition-colors ${
+                      currentStep === 0 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    disabled={currentStep === 0}
+                  >
+                    Previous
+                  </button>
+                  
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="btn-primary max-w-xs"
+                  >
+                    {currentStep === steps.length - 1 ? "Complete Setup" : "Next Step"}
+                  </button>
+                </div>
+              </form>
+              
+              <p className="text-center text-sm text-gunmetal/70">
+                Already have an expert account?{" "}
+                <Link to="/login" className="text-link">
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </div>
-        </div>
+        </ScrollArea>
       </div>
     </div>
   );
