@@ -13,21 +13,18 @@ export const loginUser = async (email: string, password: string) => {
   return data;
 };
 
-export const registerUser = async (userData: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}) => {
+export const registerUser = async (userData: FormData) => {
   const response = await fetch(`${API_BASE_URL}/users/register`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(userData),
+    // Don't set Content-Type header - browser will set it with boundary
+    body: userData,
   });
   
   const data = await response.json();
-  return data;
+  console.log(data);
+  return {
+    success: response.ok,
+    data: data,
+    error: !response.ok ? data.error : null
+  };
 };
