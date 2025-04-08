@@ -3,11 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  // Get user from localStorage
-  const user = localStorage.getItem('user') 
-    ? JSON.parse(localStorage.getItem('user') || '{}') 
-    : null;
-
   return (
     <nav className="w-full bg-gunmetal text-alabaster border-b border-timberwolf/20 shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,26 +24,13 @@ const Navbar = () => {
             <Link to="/contact" className="text-alabaster hover:text-cambridge transition-colors">
               Contact
             </Link>
-            {user && (
-              <Link to="/profile" className="text-alabaster hover:text-cambridge transition-colors">
-                My Profile
-              </Link>
-            )}
           </div>
           <div>
-            {user ? (
-              <Button asChild variant="outline" className="rounded-full border-alabaster text-alabaster hover:bg-gunmetal/90">
-                <Link to="/profile">
-                  My Expert Profile
-                </Link>
-              </Button>
-            ) : (
-              <Button asChild className="rounded-full">
-                <Link to="/register">
-                  Become a FitVerse Expert
-                </Link>
-              </Button>
-            )}
+            <Button asChild>
+              <Link to="/register" className="rounded-full">
+                Become a FitVerse Expert
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
