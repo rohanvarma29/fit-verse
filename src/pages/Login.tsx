@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
@@ -50,7 +49,9 @@ const Login = () => {
             variant: "default",
           });
 
-          navigate("/dashboard");
+          console.log("User data:", response.data.data._id);
+          // Redirect to user's profile page
+          navigate(`/expert/${response.data.data._id}`);
         } else {
           toast({
             title: "Error",
