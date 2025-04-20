@@ -1,6 +1,11 @@
-
 import React, { useState, ChangeEvent } from "react";
-import { MapPin, Pencil, Loader2, Link as IconLink, Instagram } from "lucide-react";
+import {
+  MapPin,
+  Pencil,
+  Loader2,
+  Link as IconLink,
+  Instagram,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useUser } from "@/hooks/useUser";
@@ -19,7 +24,9 @@ const ExpertProfile = () => {
   const [location, setLocation] = useState(user?.location || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [socialMedia, setSocialMedia] = useState(user?.socialMedia || "");
-  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(
+    null
+  );
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null);
 
   // When user changes file input for profile photo
@@ -66,13 +73,16 @@ const ExpertProfile = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <Card className="p-6 max-w-md w-full text-center">
-          <p className="text-lg text-red-600">{error || "Failed to load user profile"}</p>
-          <Button className="mt-4" onClick={() => navigate(-1)}>Go Back</Button>
+          <p className="text-lg text-red-600">
+            {error || "Failed to load user profile"}
+          </p>
+          <Button className="mt-4" onClick={() => navigate(-1)}>
+            Go Back
+          </Button>
         </Card>
       </div>
     );
   }
-
 
   return (
     <div className="min-h-screen bg-background py-8 px-4 sm:px-6 md:px-12">
@@ -81,11 +91,22 @@ const ExpertProfile = () => {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
           {/* Profile Photo */}
           <div className="relative w-40 h-40 rounded-full border-4 border-white bg-accent-muted flex-shrink-0 shadow-md cursor-pointer">
-            <label htmlFor="profile-photo-upload" className="block w-full h-full rounded-full overflow-hidden">
+            <label
+              htmlFor="profile-photo-upload"
+              className="block w-full h-full rounded-full overflow-hidden"
+            >
               {profilePhotoPreview ? (
-                <img src={profilePhotoPreview} alt="Profile preview" className="w-full h-full object-cover" />
+                <img
+                  src={profilePhotoPreview}
+                  alt="Profile preview"
+                  className="w-full h-full object-cover"
+                />
               ) : user.profilePhoto ? (
-                <img src={user.profilePhoto} alt={user.displayName} className="w-full h-full object-cover" />
+                <img
+                  src={user.profilePhoto}
+                  alt={user.displayName}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="flex items-center justify-center h-full w-full bg-accent-muted text-6xl font-bold text-gunmetal select-none">
                   {user.displayName.charAt(0).toUpperCase()}
@@ -119,10 +140,20 @@ const ExpertProfile = () => {
                       onChange={(e) => setDisplayName(e.target.value)}
                       autoFocus
                     />
-                    <Button variant="outline" size="sm" className="ml-3" onClick={() => handleSave("displayName")}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="ml-3"
+                      onClick={() => handleSave("displayName")}
+                    >
                       Save
                     </Button>
-                    <Button variant="ghost" size="sm" className="ml-2" onClick={() => handleCancel("displayName")}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-2"
+                      onClick={() => handleCancel("displayName")}
+                    >
                       Cancel
                     </Button>
                   </>
@@ -156,13 +187,31 @@ const ExpertProfile = () => {
                     autoFocus
                   />
                 ) : (
-                  <span>{user.location || <span className="italic text-timberwolf">No location set</span>}</span>
+                  <span>
+                    {user.location || (
+                      <span className="italic text-timberwolf">
+                        No location set
+                      </span>
+                    )}
+                  </span>
                 )}
               </div>
               {editingField === "location" ? (
                 <>
-                  <Button variant="outline" size="sm" onClick={() => handleSave("location")}>Save</Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleCancel("location")}>Cancel</Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSave("location")}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCancel("location")}
+                  >
+                    Cancel
+                  </Button>
                 </>
               ) : (
                 <Button
@@ -192,7 +241,11 @@ const ExpertProfile = () => {
                   />
                 ) : user.socialMedia ? (
                   <a
-                    href={user.socialMedia.startsWith("http") ? user.socialMedia : `https://instagram.com/${user.socialMedia}`}
+                    href={
+                      user.socialMedia.startsWith("http")
+                        ? user.socialMedia
+                        : `https://instagram.com/${user.socialMedia}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline text-cambridge"
@@ -200,13 +253,27 @@ const ExpertProfile = () => {
                     {user.socialMedia}
                   </a>
                 ) : (
-                  <span className="italic text-timberwolf">No social media linked</span>
+                  <span className="italic text-timberwolf">
+                    No social media linked
+                  </span>
                 )}
               </div>
               {editingField === "socialMedia" ? (
                 <>
-                  <Button variant="outline" size="sm" onClick={() => handleSave("socialMedia")}>Save</Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleCancel("socialMedia")}>Cancel</Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSave("socialMedia")}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCancel("socialMedia")}
+                  >
+                    Cancel
+                  </Button>
                 </>
               ) : (
                 <Button
@@ -229,8 +296,20 @@ const ExpertProfile = () => {
             <h3 className="text-xl font-semibold text-cambridge">About Me</h3>
             {editingField === "bio" ? (
               <>
-                <Button variant="outline" size="sm" onClick={() => handleSave("bio")}>Save</Button>
-                <Button variant="ghost" size="sm" onClick={() => handleCancel("bio")}>Cancel</Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSave("bio")}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleCancel("bio")}
+                >
+                  Cancel
+                </Button>
               </>
             ) : (
               <Button
@@ -254,10 +333,22 @@ const ExpertProfile = () => {
             />
           ) : (
             <p className="text-gunmetal whitespace-pre-wrap min-h-[120px]">
-              {user.bio || <span className="italic text-timberwolf">No bio yet. Click ‘Edit’ to tell clients about yourself.</span>}
+              {user.bio || (
+                <span className="italic text-timberwolf">
+                  No bio yet. Click ‘Edit’ to tell clients about yourself.
+                </span>
+              )}
             </p>
           )}
         </section>
+        <Button
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/");
+          }}
+        >
+          Logout
+        </Button>
       </div>
     </div>
   );

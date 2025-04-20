@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -15,13 +14,22 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden md:flex space-x-8 items-center">
-            <Link to="/" className="text-alabaster hover:text-cambridge transition-colors">
+            <Link
+              to="/"
+              className="text-alabaster hover:text-cambridge transition-colors"
+            >
               Home
             </Link>
-            <Link to="/about" className="text-alabaster hover:text-cambridge transition-colors">
+            <Link
+              to="/about"
+              className="text-alabaster hover:text-cambridge transition-colors"
+            >
               About
             </Link>
-            <Link to="/contact" className="text-alabaster hover:text-cambridge transition-colors">
+            <Link
+              to="/contact"
+              className="text-alabaster hover:text-cambridge transition-colors"
+            >
               Contact
             </Link>
           </div>
