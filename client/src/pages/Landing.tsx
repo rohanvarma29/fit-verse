@@ -23,8 +23,10 @@ const mockExperts: Expert[] = [
     name: "Alex Johnson",
     category: "fitness",
     location: "New York, NY",
-    description: "Certified Personal Trainer specializing in strength training and HIIT workouts",
-    image: "https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "Certified Personal Trainer specializing in strength training and HIIT workouts",
+    image:
+      "https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.9,
   },
   {
@@ -32,8 +34,10 @@ const mockExperts: Expert[] = [
     name: "Sarah Miller",
     category: "nutrition",
     location: "Los Angeles, CA",
-    description: "Registered Dietitian with focus on plant-based nutrition and sustainable eating habits",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "Registered Dietitian with focus on plant-based nutrition and sustainable eating habits",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.8,
   },
   {
@@ -41,8 +45,10 @@ const mockExperts: Expert[] = [
     name: "David Chen",
     category: "yoga",
     location: "San Francisco, CA",
-    description: "Yoga Alliance certified instructor with 10+ years experience in Hatha and Vinyasa yoga",
-    image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "Yoga Alliance certified instructor with 10+ years experience in Hatha and Vinyasa yoga",
+    image:
+      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.7,
   },
   {
@@ -50,8 +56,10 @@ const mockExperts: Expert[] = [
     name: "Priya Patel",
     category: "fitness",
     location: "Chicago, IL",
-    description: "CrossFit Level 3 Trainer specializing in functional fitness and mobility",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "CrossFit Level 3 Trainer specializing in functional fitness and mobility",
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.9,
   },
   {
@@ -59,8 +67,10 @@ const mockExperts: Expert[] = [
     name: "Michael Rodriguez",
     category: "nutrition",
     location: "Miami, FL",
-    description: "Sports Nutritionist working with athletes to optimize performance and recovery",
-    image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "Sports Nutritionist working with athletes to optimize performance and recovery",
+    image:
+      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.6,
   },
   {
@@ -68,15 +78,19 @@ const mockExperts: Expert[] = [
     name: "Emma Wilson",
     category: "yoga",
     location: "Austin, TX",
-    description: "Mindfulness coach and yoga instructor specializing in restorative practices",
-    image: "https://images.unsplash.com/photo-1592621385612-4d7129426394?q=80&w=200&h=200&auto=format&fit=crop",
+    description:
+      "Mindfulness coach and yoga instructor specializing in restorative practices",
+    image:
+      "https://images.unsplash.com/photo-1592621385612-4d7129426394?q=80&w=200&h=200&auto=format&fit=crop",
     rating: 4.8,
   },
 ];
 
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<ExpertCategory | "all">("all");
+  const [selectedCategory, setSelectedCategory] = useState<
+    ExpertCategory | "all"
+  >("all");
   const [selectedLocation, setSelectedLocation] = useState("");
   const navigate = useNavigate();
 
@@ -86,7 +100,8 @@ const Landing = () => {
       expert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       expert.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory = selectedCategory === "all" || expert.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === "all" || expert.category === selectedCategory;
 
     const matchesLocation =
       selectedLocation === "" ||
@@ -96,7 +111,9 @@ const Landing = () => {
   });
 
   const getExpertsByCategory = (category: ExpertCategory) => {
-    return mockExperts.filter((expert) => expert.category === category).slice(0, 2);
+    return mockExperts
+      .filter((expert) => expert.category === category)
+      .slice(0, 2);
   };
 
   return (
@@ -109,11 +126,15 @@ const Landing = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gunmetal">
-                Find Your Perfect <span className="bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">Fitness & Nutrition</span> Partner!
+                Find Your Perfect{" "}
+                <span className="bg-gradient-to-r from-cambridge via-cambridge/80 to-cambridge/60 bg-clip-text text-transparent">
+                  Fitness & Nutrition
+                </span>{" "}
+                Partner!
               </h1>
               <p className="text-lg text-gunmetal/70">
-                Connect with certified fitness trainers, nutritionists, and yoga instructors
-                to achieve your health and wellness goals.
+                Connect with certified fitness trainers, nutritionists, and yoga
+                instructors to achieve your health and wellness goals.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button asChild size="lg">
@@ -126,7 +147,7 @@ const Landing = () => {
                   size="lg"
                   variant="secondary"
                   onClick={() => {
-                    navigate("/expert/1");
+                    navigate("/expert/67f55fbcd0a3e3de463e54b3");
                   }}
                 >
                   Profile View
@@ -149,8 +170,12 @@ const Landing = () => {
                     />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">500+ Certified Experts</p>
-                    <p className="text-xs text-gunmetal/60">Ready to help you</p>
+                    <p className="font-semibold text-sm">
+                      500+ Certified Experts
+                    </p>
+                    <p className="text-xs text-gunmetal/60">
+                      Ready to help you
+                    </p>
                   </div>
                 </div>
               </div>
@@ -195,7 +220,11 @@ const Landing = () => {
                 <select
                   className="form-input pl-10 appearance-none pr-8"
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value as ExpertCategory | "all")}
+                  onChange={(e) =>
+                    setSelectedCategory(
+                      e.target.value as ExpertCategory | "all"
+                    )
+                  }
                 >
                   <option value="all">All Categories</option>
                   <option value="fitness">Fitness Trainers</option>
@@ -211,21 +240,31 @@ const Landing = () => {
       {/* Featured Categories */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold mb-12 text-center text-gunmetal">Explore Our Expert Categories</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center text-gunmetal">
+            Explore Our Expert Categories
+          </h2>
 
           {/* Category: Fitness Trainers */}
           <div className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">Fitness Trainers</h3>
-              <Link to="#" className="text-cambridge hover:underline">View All</Link>
+              <h3 className="text-2xl font-semibold text-gunmetal">
+                Fitness Trainers
+              </h3>
+              <Link to="#" className="text-cambridge hover:underline">
+                View All
+              </Link>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getExpertsByCategory("fitness").map((expert) => (
                 <ExpertCard key={expert.id} expert={expert} />
               ))}
               <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-gunmetal">Looking for more options?</h3>
-                <p className="text-gunmetal/70 mb-4">Discover all our certified fitness trainers</p>
+                <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                  Looking for more options?
+                </h3>
+                <p className="text-gunmetal/70 mb-4">
+                  Discover all our certified fitness trainers
+                </p>
                 <Button variant="outline">View All Trainers</Button>
               </div>
             </div>
@@ -234,16 +273,24 @@ const Landing = () => {
           {/* Category: Nutritionists */}
           <div className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">Nutritionists</h3>
-              <Link to="#" className="text-cambridge hover:underline">View All</Link>
+              <h3 className="text-2xl font-semibold text-gunmetal">
+                Nutritionists
+              </h3>
+              <Link to="#" className="text-cambridge hover:underline">
+                View All
+              </Link>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getExpertsByCategory("nutrition").map((expert) => (
                 <ExpertCard key={expert.id} expert={expert} />
               ))}
               <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-gunmetal">Need nutrition advice?</h3>
-                <p className="text-gunmetal/70 mb-4">Connect with our certified nutritionists</p>
+                <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                  Need nutrition advice?
+                </h3>
+                <p className="text-gunmetal/70 mb-4">
+                  Connect with our certified nutritionists
+                </p>
                 <Button variant="outline">View All Nutritionists</Button>
               </div>
             </div>
@@ -252,16 +299,24 @@ const Landing = () => {
           {/* Category: Yoga Trainers */}
           <div>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">Yoga Trainers</h3>
-              <Link to="#" className="text-cambridge hover:underline">View All</Link>
+              <h3 className="text-2xl font-semibold text-gunmetal">
+                Yoga Trainers
+              </h3>
+              <Link to="#" className="text-cambridge hover:underline">
+                View All
+              </Link>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getExpertsByCategory("yoga").map((expert) => (
                 <ExpertCard key={expert.id} expert={expert} />
               ))}
               <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-gunmetal">Find inner peace</h3>
-                <p className="text-gunmetal/70 mb-4">Explore our yoga and mindfulness experts</p>
+                <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                  Find inner peace
+                </h3>
+                <p className="text-gunmetal/70 mb-4">
+                  Explore our yoga and mindfulness experts
+                </p>
                 <Button variant="outline">View All Yoga Trainers</Button>
               </div>
             </div>
@@ -272,39 +327,83 @@ const Landing = () => {
       {/* Platform Benefits */}
       <section className="py-16 px-4 bg-timberwolf">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold mb-12 text-center text-gunmetal">Why Choose FitVerse?</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center text-gunmetal">
+            Why Choose FitVerse?
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-cambridge/10 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-cambridge" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-cambridge"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gunmetal">Certified Experts</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                Certified Experts
+              </h3>
               <p className="text-gunmetal/70">
-                Every trainer, nutritionist, and yoga instructor is verified and certified in their field
+                Every trainer, nutritionist, and yoga instructor is verified and
+                certified in their field
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-cambridge/10 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-cambridge" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-cambridge"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gunmetal">Personalized Plans</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                Personalized Plans
+              </h3>
               <p className="text-gunmetal/70">
-                Custom fitness and nutrition plans tailored to your specific goals and needs
+                Custom fitness and nutrition plans tailored to your specific
+                goals and needs
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-cambridge/10 rounded-full flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-cambridge" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-cambridge"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gunmetal">Flexible Scheduling</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gunmetal">
+                Flexible Scheduling
+              </h3>
               <p className="text-gunmetal/70">
-                Book sessions that fit your schedule, with options for virtual or in-person training
+                Book sessions that fit your schedule, with options for virtual
+                or in-person training
               </p>
             </div>
           </div>
@@ -314,11 +413,18 @@ const Landing = () => {
       {/* CTA Section */}
       <section className="py-16 px-4 bg-gunmetal text-alabaster">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Share Your Expertise?</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            Ready to Share Your Expertise?
+          </h2>
           <p className="text-xl mb-8 opacity-90">
-            Join our community of wellness professionals and start growing your client base
+            Join our community of wellness professionals and start growing your
+            client base
           </p>
-          <Button asChild className="bg-cambridge hover:bg-cambridge/90" size="lg">
+          <Button
+            asChild
+            className="bg-cambridge hover:bg-cambridge/90"
+            size="lg"
+          >
             <Link to="/register">Become a FitVerse Expert</Link>
           </Button>
         </div>
@@ -331,47 +437,154 @@ const Landing = () => {
             <div>
               <h3 className="text-xl font-bold mb-4">FitVerse</h3>
               <p className="text-timberwolf">
-                Connecting wellness seekers with certified fitness and nutrition experts.
+                Connecting wellness seekers with certified fitness and nutrition
+                experts.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="text-timberwolf hover:text-cambridge transition-colors">Home</Link></li>
-                <li><Link to="/about" className="text-timberwolf hover:text-cambridge transition-colors">About Us</Link></li>
-                <li><Link to="/contact" className="text-timberwolf hover:text-cambridge transition-colors">Contact</Link></li>
-                <li><Link to="/faq" className="text-timberwolf hover:text-cambridge transition-colors">FAQs</Link></li>
+                <li>
+                  <Link
+                    to="/"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/faq"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    FAQs
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">For Experts</h4>
               <ul className="space-y-2">
-                <li><Link to="/register" className="text-timberwolf hover:text-cambridge transition-colors">Sign Up</Link></li>
-                <li><Link to="/login" className="text-timberwolf hover:text-cambridge transition-colors">Login</Link></li>
-                <li><Link to="#" className="text-timberwolf hover:text-cambridge transition-colors">How It Works</Link></li>
-                <li><Link to="#" className="text-timberwolf hover:text-cambridge transition-colors">Resources</Link></li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/login"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    How It Works
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Resources
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-2">
-                <li><Link to="#" className="text-timberwolf hover:text-cambridge transition-colors">Privacy Policy</Link></li>
-                <li><Link to="#" className="text-timberwolf hover:text-cambridge transition-colors">Terms of Service</Link></li>
-                <li><Link to="#" className="text-timberwolf hover:text-cambridge transition-colors">Cookie Policy</Link></li>
+                <li>
+                  <Link
+                    to="#"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="#"
+                    className="text-timberwolf hover:text-cambridge transition-colors"
+                  >
+                    Cookie Policy
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-timberwolf/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-timberwolf/70">&copy; {new Date().getFullYear()} FitVerse. All rights reserved.</p>
+            <p className="text-timberwolf/70">
+              &copy; {new Date().getFullYear()} FitVerse. All rights reserved.
+            </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
-              <a href="#" className="text-timberwolf/70 hover:text-cambridge transition-colors">
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+              <a
+                href="#"
+                className="text-timberwolf/70 hover:text-cambridge transition-colors"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                </svg>
               </a>
-              <a href="#" className="text-timberwolf/70 hover:text-cambridge transition-colors">
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+              <a
+                href="#"
+                className="text-timberwolf/70 hover:text-cambridge transition-colors"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                </svg>
               </a>
-              <a href="#" className="text-timberwolf/70 hover:text-cambridge transition-colors">
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.859.07-3.211 0-3.586-.015-4.859-.074-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
+              <a
+                href="#"
+                className="text-timberwolf/70 hover:text-cambridge transition-colors"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.859.07-3.211 0-3.586-.015-4.859-.074-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+                </svg>
               </a>
             </div>
           </div>
@@ -408,7 +621,9 @@ const ExpertCard = ({ expert }: { expert: Expert }) => {
             </span>
           </div>
         </div>
-        <h3 className="text-xl font-semibold mb-1 text-gunmetal">{expert.name}</h3>
+        <h3 className="text-xl font-semibold mb-1 text-gunmetal">
+          {expert.name}
+        </h3>
         <div className="flex items-center text-gunmetal/60 text-sm mb-3">
           <MapPin className="h-4 w-4 mr-1" />
           {expert.location}
