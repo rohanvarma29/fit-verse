@@ -45,7 +45,7 @@ const Login = () => {
 
           toast({
             title: "Success!",
-            description: response.message,
+            description: response.data.message,
             variant: "default",
           });
 

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -7,6 +8,7 @@ interface User {
   location?: string;
   bio?: string;
   profilePhoto?: string;
+  socialMedia?: string; // Added this optional field to fix TS error
 }
 
 interface UserResponse {
