@@ -145,7 +145,8 @@ const Landing = () => {
                 </Button>
                 <Button
                   size="lg"
-                  variant="secondary"
+                  variant="outline"
+                  className="border-purple-600 text-purple-700 hover:bg-purple-100 focus:ring-purple-500"
                   onClick={() => {
                     navigate("/expert/67f55fbcd0a3e3de463e54b3");
                   }}
