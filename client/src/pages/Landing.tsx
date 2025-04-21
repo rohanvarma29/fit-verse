@@ -594,7 +594,6 @@ const Landing = () => {
   );
 };
 
-// Expert Card Component
 const ExpertCard = ({ expert }: { expert: Expert }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-timberwolf/30 hover:shadow-lg transition-shadow">
