@@ -1,12 +1,11 @@
 {
   "name": "fitverse-fullstack",
   "version": "1.0.0",
-  "main": "index.js",
-  "private": true,
   "scripts": {
     "install": "cd client && npm install && cd ../server && npm install",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "start": "cd server && npm start",
+    "build:dev": "cd client && vite build --mode development"
   },
   "keywords": [],
   "author": "Rohan Varma Gaddam",
