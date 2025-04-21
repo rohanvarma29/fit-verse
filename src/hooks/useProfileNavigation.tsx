@@ -8,6 +8,7 @@ export const useProfileNavigation = (defaultSection: string = "profile") => {
     setActiveSection(section);
   };
   
+  // Valid sections are now only "profile" and "programs"
   return {
     activeSection,
     navigateToSection

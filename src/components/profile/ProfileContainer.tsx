@@ -19,7 +19,7 @@ const ProfileContainer: React.FC<ProfileContainerProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-alabaster/50">
       <SidebarProvider>
         <div className="flex min-h-screen w-full">
           {/* Sidebar */}

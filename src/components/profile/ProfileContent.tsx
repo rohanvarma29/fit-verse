@@ -2,7 +2,6 @@
 import React from "react";
 import PersonalInfoSection from "./PersonalInfoSection";
 import ProgramDetailsSection from "./ProgramDetailsSection";
-import AvailabilitySection from "./AvailabilitySection";
 
 interface ProfileContentProps {
   activeSection: string;
@@ -10,14 +9,12 @@ interface ProfileContentProps {
 }
 
 const ProfileContent: React.FC<ProfileContentProps> = ({ activeSection, user }) => {
-  // Render the content based on active section
+  // Render the content based on active section (no more availability)
   switch (activeSection) {
     case "profile":
       return <PersonalInfoSection user={user} />;
     case "programs":
       return <ProgramDetailsSection />;
-    case "availability":
-      return <AvailabilitySection />;
     default:
       return <PersonalInfoSection user={user} />;
   }
