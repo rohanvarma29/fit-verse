@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "@/hooks/useUser";
@@ -10,7 +9,7 @@ import ProfileErrorState from "@/components/profile/ProfileErrorState";
 const ExpertProfile = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, loading, error } = useUser(id || "");
+  const { user, loading, error, refreshUser } = useUser(id || "");
   const { activeSection, navigateToSection } = useProfileNavigation();
 
   if (loading) {
@@ -26,6 +25,7 @@ const ExpertProfile = () => {
       user={user}
       activeSection={activeSection}
       onSectionChange={navigateToSection}
+      refreshUser={refreshUser}
     />
   );
 };

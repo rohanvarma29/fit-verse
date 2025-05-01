@@ -1,9 +1,10 @@
-
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from "@/components/ui/use-toast";
+import { updateUserProfile } from "@/lib/api";
 
 interface PersonalInfoSectionProps {
   user: {
@@ -16,16 +17,21 @@ interface PersonalInfoSectionProps {
     profilePhoto?: string;
     socialMedia?: string;
   } | null;
+  refreshUser: () => Promise<void>;
 }
 
-const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({ user }) => {
+const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
+  user,
+  refreshUser,
+}) => {
+  const { toast } = useToast();
   const [editingField, setEditingField] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [location, setLocation] = useState(user?.location || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [socialMedia, setSocialMedia] = useState(user?.socialMedia || "");
   const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(
-    null
+    user.profilePhoto || null
   );
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null);
 
@@ -43,12 +49,51 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({ user }) => {
     }
   };
 
-  // Placeholder save function for each field
-  const handleSave = (field: string) => {
-    console.log("Save field:", field);
-    // Here would be the API call for updating this field
-    setEditingField(null);
-    // Update local states or refetch user after saving, for now just log
+  // Save function for each field
+  const handleSave = async (field: string) => {
+    console.log(`Saving field: ${field}`);
+    try {
+      const formData = new FormData();
+      formData.append("firstName", user.firstName || "");
+      formData.append("lastName", user.lastName || "");
+      formData.append("displayName", displayName);
+      formData.append("location", location);
+      formData.append("bio", bio);
+      formData.append("socialMedia", socialMedia);
+      if (profilePhotoFile) {
+        formData.append("profilePhoto", profilePhotoFile);
+        console.log("Adding profile photo to form data");
+      }
+
+      console.log("Form data prepared, calling updateUserProfile");
+      const result = await updateUserProfile(formData);
+      console.log("Update result:", result);
+
+      if (result.success) {
+        toast({
+          title: "Profile Updated",
+          description: "Your profile has been updated successfully.",
+        });
+        setEditingField(null);
+        setProfilePhotoFile(null);
+
+        // Refresh user data
+        await refreshUser();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error || "Failed to update profile.",
+        });
+      }
+    } catch (error) {
+      console.error("Error in handleSave:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update profile. Please try again.",
+      });
+    }
   };
 
   // Handle cancel editing and revert changes
@@ -72,13 +117,17 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({ user }) => {
               <Avatar className="h-32 w-32 border-4 border-white shadow-md">
                 {profilePhotoPreview ? (
                   <AvatarImage
-                    src={profilePhotoPreview}
+                    src={
+                      profilePhotoPreview.startsWith("blob:")
+                        ? profilePhotoPreview
+                        : `http://localhost:3000${profilePhotoPreview}`
+                    }
                     alt="Profile preview"
                     className="object-cover"
                   />
                 ) : user.profilePhoto ? (
                   <AvatarImage
-                    src={user.profilePhoto}
+                    src={`http://localhost:3000${user.profilePhoto}`}
                     alt={user.displayName}
                     className="object-cover"
                   />
@@ -102,16 +151,11 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({ user }) => {
                 onChange={handlePhotoChange}
               />
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="text-sm"
-              onClick={() => {
-                if (profilePhotoFile) {
-                  // Here would be API call to save profile photo
-                  console.log("Uploading photo:", profilePhotoFile);
-                }
-              }}
+              onClick={() => handleSave("profilePhoto")}
               disabled={!profilePhotoFile}
             >
               {profilePhotoFile ? "Save Photo" : "Change Photo"}
@@ -221,9 +265,7 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({ user }) => {
             {/* Bio */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-medium text-gunmetal">
-                  Bio
-                </label>
+                <label className="text-sm font-medium text-gunmetal">Bio</label>
                 <Button
                   variant="ghost"
                   size="sm"

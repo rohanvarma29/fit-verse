@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -9,12 +8,14 @@ interface ProfileContainerProps {
   user: any;
   activeSection: string;
   onSectionChange: (section: string) => void;
+  refreshUser: () => Promise<void>;
 }
 
-const ProfileContainer: React.FC<ProfileContainerProps> = ({ 
-  user, 
-  activeSection, 
-  onSectionChange 
+const ProfileContainer: React.FC<ProfileContainerProps> = ({
+  user,
+  activeSection,
+  onSectionChange,
+  refreshUser,
 }) => {
   const isMobile = useIsMobile();
 
@@ -32,9 +33,10 @@ const ProfileContainer: React.FC<ProfileContainerProps> = ({
           {/* Main Content */}
           <div className="flex-1 p-6 md:p-8 lg:p-10 overflow-auto">
             <div className="max-w-4xl mx-auto">
-              <ProfileContent 
-                activeSection={activeSection} 
-                user={user} 
+              <ProfileContent
+                activeSection={activeSection}
+                user={user}
+                refreshUser={refreshUser}
               />
             </div>
           </div>

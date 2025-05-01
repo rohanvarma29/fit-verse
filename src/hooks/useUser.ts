@@ -21,6 +21,7 @@ interface UseUserReturn {
   user: User | null;
   loading: boolean;
   error: string | null;
+  refreshUser: () => Promise<void>;
 }
 
 export const useUser = (userId: string): UseUserReturn => {
@@ -29,8 +30,7 @@ export const useUser = (userId: string): UseUserReturn => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
+  const fetchUser = async () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
@@ -60,10 +60,17 @@ export const useUser = (userId: string): UseUserReturn => {
       }
     };
 
+  useEffect(() => {
     if (userId) {
       fetchUser();
     }
   }, [userId]);
 
-  return { user, loading, error };
+  const refreshUser = async () => {
+    if (userId) {
+      await fetchUser();
+    }
+  };
+
+  return { user, loading, error, refreshUser };
 };

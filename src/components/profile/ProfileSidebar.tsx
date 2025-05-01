@@ -76,7 +76,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
         <Avatar className="h-20 w-20 mb-4 ring-2 ring-offset-2 ring-cambridge/40">
           {user.profilePhoto ? (
             <AvatarImage
-              src={user.profilePhoto}
+              src={`http://localhost:3000${user.profilePhoto}`}
               alt={user.displayName}
               className="object-cover"
             />

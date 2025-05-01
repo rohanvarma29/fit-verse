@@ -2,6 +2,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 export const loginUser = async (email: string, password: string) => {
   try {
+    
     console.log('API Request:', `${API_BASE_URL}/users/login`, {
       method: 'POST',
       headers: {
@@ -9,6 +10,7 @@ export const loginUser = async (email: string, password: string) => {
       },
       body: JSON.stringify({ email, password }),
     });
+
     const response = await fetch(`${API_BASE_URL}/users/login`, {
       method: 'POST',
       headers: {
@@ -68,4 +70,53 @@ export const registerUser = async (userData: FormData) => {
     data: data,
     error: !response.ok ? data.error : null
   };
+};
+
+export const updateUserProfile = async (userData: FormData) => {
+  try {
+    const token = localStorage.getItem('token');
+    console.log('Updating user profile with token:', token ? 'Token exists' : 'No token');
+    console.log('API URL:', `${API_BASE_URL}/users/update`);
+    
+    const response = await fetch(`${API_BASE_URL}/users/update`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: userData,
+    });
+    
+    console.log('Update response status:', response.status);
+    
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while updating profile';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+    
+    const data = await response.json();
+    console.log('Update response data:', data);
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
 };

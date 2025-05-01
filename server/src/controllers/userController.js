@@ -214,10 +214,67 @@ const logoutUser = (req, res) => {
   res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
 
+// @desc    Update user profile
+// @route   PATCH /api/users/update
+// @access  Private
+const updateUser = async (req, res, next) => {
+  console.log('updateUser called with user:', req.user);
+  console.log('Request body:', req.body);
+  console.log('Request file:', req.file);
+  
+  try {
+    const user = await User.findById(req.user._id);
+    console.log('Found user:', user ? 'Yes' : 'No');
+
+    if (user) {
+      user.firstName = req.body.firstName || user.firstName;
+      user.lastName = req.body.lastName || user.lastName;
+      user.email = req.body.email || user.email;
+      user.displayName = req.body.displayName || user.displayName;
+      user.location = req.body.location || user.location;
+      user.bio = req.body.bio || user.bio;
+      user.socialMedia = req.body.socialMedia || user.socialMedia;
+
+      if (req.file) {
+        user.profilePhoto = `/images/profile-photo/${req.file.filename}`;
+        console.log('Updated profile photo:', user.profilePhoto);
+      }
+
+      const updatedUser = await user.save();
+      console.log('User updated successfully');
+
+      res.json({
+        success: true,
+        data: {
+          _id: updatedUser._id,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          displayName: updatedUser.displayName,
+          profilePhoto: updatedUser.profilePhoto,
+          location: updatedUser.location,
+          bio: updatedUser.bio,
+          socialMedia: updatedUser.socialMedia,
+        },
+        message: 'Profile updated successfully'
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+  } catch (error) {
+    console.error('Error in updateUser:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   updateAvailability,
   getUserById,
   logoutUser,
+  updateUser,
 };
