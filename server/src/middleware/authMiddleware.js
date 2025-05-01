@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
 const protect = async (req, res, next) => {
+  console.log('Middleware protect called');
+  console.log('Received request:', req.headers);
   let token;
 
   // Check if token exists in headers
@@ -12,7 +14,7 @@ const protect = async (req, res, next) => {
 
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+      console.log('Decoded token:', decoded);
       // Get user from the token (exclude password)
       req.user = await User.findById(decoded.id).select('-password');
 

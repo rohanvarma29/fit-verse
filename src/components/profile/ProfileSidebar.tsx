@@ -1,6 +1,6 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, Settings } from "lucide-react";
@@ -13,6 +13,8 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+const API_BASE_URL = "http://localhost:3000/api";
+//import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 interface ProfileSidebarProps {
   user: {
@@ -30,10 +32,40 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   onSectionChange,
 }) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      console.log(`${API_BASE_URL}/users/logout`);
+      const response = await fetch(`${API_BASE_URL}/users/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        navigate("/");
+        toast({
+          title: "Logged out successfully!",
+          description: "You have been successfully logged out.",
+        });
+      } else {
+        const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Logout failed",
+          description:
+            errorData.message || "Something went wrong. Please try again.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Logout failed",
+        description: "Something went wrong. Please try again.",
+      });
+    }
   };
 
   if (!user) return null;
@@ -43,7 +75,11 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
       <SidebarHeader className="flex flex-col items-center justify-center p-6">
         <Avatar className="h-20 w-20 mb-4 ring-2 ring-offset-2 ring-cambridge/40">
           {user.profilePhoto ? (
-            <AvatarImage src={user.profilePhoto} alt={user.displayName} className="object-cover" />
+            <AvatarImage
+              src={user.profilePhoto}
+              alt={user.displayName}
+              className="object-cover"
+            />
           ) : (
             <AvatarFallback className="bg-cambridge text-alabaster text-xl font-medium">
               {user.displayName.charAt(0).toUpperCase()}

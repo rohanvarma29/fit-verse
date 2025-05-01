@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { registerUser, loginUser, updateAvailability, getUserById } = require('../controllers/userController');
+const { registerUser, loginUser, updateAvailability, getUserById, logoutUser } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
@@ -33,7 +33,10 @@ router.post(
 router.patch('/availability', protect, updateAvailability);
 
 // Get User by ID
-router.get('/:id', getUserById);
+router.get('/:id', protect, getUserById);
+
+// Logout User
+router.post('/logout', logoutUser);
 
 module.exports = router;
 

@@ -108,7 +108,6 @@ const loginUser = async (req, res, next) => {
     if (user && (await user.matchPassword(password))) {
       // Generate token
       const token = generateToken(user._id);
-      
       res.json({
         success: true,
         data: {
@@ -175,6 +174,7 @@ const updateAvailability = async (req, res, next) => {
 // @route   GET /api/users/:id
 // @access  Public
 const getUserById = async (req, res, next) => {
+  console.log('getUserById called with user:', req.user);
   console.log('Received request to get user by ID:', req.params.id);
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -202,9 +202,22 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+// @desc    Logout user / clear token
+// @route   POST /api/users/logout
+// @access  Private
+const logoutUser = (req, res) => {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ success: true, message: 'Logged out successfully' });
+};
+
 module.exports = {
   registerUser,
   loginUser,
   updateAvailability,
   getUserById,
+  logoutUser,
 };
