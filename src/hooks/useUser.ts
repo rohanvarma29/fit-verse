@@ -8,7 +8,8 @@ interface User {
   location?: string;
   bio?: string;
   profilePhoto?: string;
-  socialMedia?: string; // Added this optional field to fix TS error
+  socialMedia?: string;
+  meetLink?: string;
 }
 
 interface UserResponse {

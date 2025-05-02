@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, Calendar } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 const API_BASE_URL = "http://localhost:3000/api";
 //import.meta.env.VITE_API_URL || "http://localhost:3000/api";
@@ -33,6 +34,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { toggleSidebar, isMobile } = useSidebar();
 
   const handleLogout = async () => {
     try {
@@ -70,6 +72,13 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 
   if (!user) return null;
 
+  const handleSectionChange = (section: string) => {
+    onSectionChange(section);
+    if (isMobile) {
+      toggleSidebar();
+    }
+  };
+
   return (
     <Sidebar>
       <SidebarHeader className="flex flex-col items-center justify-center p-6">
@@ -95,10 +104,12 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={() => onSectionChange("profile")}
+              onClick={() => handleSectionChange("profile")}
               isActive={activeSection === "profile"}
               tooltip="Profile Information"
-              className="transition-all duration-200 font-medium"
+              className={`transition-all duration-200 font-medium ${
+                isMobile ? "text-white" : "text-gunmetal"
+              }`}
             >
               <User className="text-cambridge" />
               <span>Personal Info</span>
@@ -107,13 +118,29 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={() => onSectionChange("programs")}
+              onClick={() => handleSectionChange("programs")}
               isActive={activeSection === "programs"}
               tooltip="Program Details"
-              className="transition-all duration-200 font-medium"
+              className={`transition-all duration-200 font-medium ${
+                isMobile ? "text-white" : "text-gunmetal"
+              }`}
             >
               <Settings className="text-cambridge" />
               <span>Program Details</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => handleSectionChange("availability")}
+              isActive={activeSection === "availability"}
+              tooltip="Availability"
+              className={`transition-all duration-200 font-medium ${
+                isMobile ? "text-white" : "text-gunmetal"
+              }`}
+            >
+              <Calendar className="text-cambridge" />
+              <span>Availability</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -122,11 +149,18 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
       <SidebarFooter className="mt-auto p-6">
         <Button
           variant="outline"
-          className="w-full border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors font-medium shadow-sm"
+          className="w-full border-red-300 text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors font-medium shadow-sm"
           onClick={handleLogout}
         >
           <LogOut className="mr-2 h-4 w-4" />
           Logout
+        </Button>
+        <Button
+          variant="outline"
+          className="w-full border-gunmetal-300 text-gunmetal hover:bg-green-200 transition-colors font-medium shadow-sm"
+          onClick={() => navigate("/")}
+        >
+          Go to Home
         </Button>
       </SidebarFooter>
     </Sidebar>

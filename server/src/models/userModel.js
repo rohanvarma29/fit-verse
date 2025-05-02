@@ -51,14 +51,9 @@ const userSchema = new mongoose.Schema({
   },
 
   // Availability
-  availability: {
-    monday: [{ startTime: String, endTime: String }],
-    tuesday: [{ startTime: String, endTime: String }],
-    wednesday: [{ startTime: String, endTime: String }],
-    thursday: [{ startTime: String, endTime: String }],
-    friday: [{ startTime: String, endTime: String }],
-    saturday: [{ startTime: String, endTime: String }],
-    sunday: [{ startTime: String, endTime: String }],
+  meetLink: {
+    type: String,
+    trim: true,
   },
 }, {
   timestamps: true,

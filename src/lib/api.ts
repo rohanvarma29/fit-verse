@@ -120,3 +120,127 @@ export const updateUserProfile = async (userData: FormData) => {
     };
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while fetching users';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};
+
+export const getUserById = async (userId: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while fetching user';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};
+
+export const updateAvailability = async (meetLink: string) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${API_BASE_URL}/users/availability`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ meetLink }),
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while updating availability';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};

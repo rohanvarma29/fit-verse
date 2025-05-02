@@ -1,120 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
-import { Search, MapPin, Filter, Star } from "lucide-react";
+import { Search, MapPin, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { getAllUsers } from "@/lib/api";
 
-type ExpertCategory = "fitness" | "nutrition" | "yoga";
-
-interface Expert {
-  id: string;
-  name: string;
-  category: ExpertCategory;
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
   location: string;
-  description: string;
-  image: string;
-  rating: number;
+  bio: string;
+  profilePhoto: string | null;
 }
-
-const mockExperts: Expert[] = [
-  {
-    id: "1",
-    name: "Alex Johnson",
-    category: "fitness",
-    location: "New York, NY",
-    description:
-      "Certified Personal Trainer specializing in strength training and HIIT workouts",
-    image:
-      "https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.9,
-  },
-  {
-    id: "2",
-    name: "Sarah Miller",
-    category: "nutrition",
-    location: "Los Angeles, CA",
-    description:
-      "Registered Dietitian with focus on plant-based nutrition and sustainable eating habits",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.8,
-  },
-  {
-    id: "3",
-    name: "David Chen",
-    category: "yoga",
-    location: "San Francisco, CA",
-    description:
-      "Yoga Alliance certified instructor with 10+ years experience in Hatha and Vinyasa yoga",
-    image:
-      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.7,
-  },
-  {
-    id: "4",
-    name: "Priya Patel",
-    category: "fitness",
-    location: "Chicago, IL",
-    description:
-      "CrossFit Level 3 Trainer specializing in functional fitness and mobility",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.9,
-  },
-  {
-    id: "5",
-    name: "Michael Rodriguez",
-    category: "nutrition",
-    location: "Miami, FL",
-    description:
-      "Sports Nutritionist working with athletes to optimize performance and recovery",
-    image:
-      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.6,
-  },
-  {
-    id: "6",
-    name: "Emma Wilson",
-    category: "yoga",
-    location: "Austin, TX",
-    description:
-      "Mindfulness coach and yoga instructor specializing in restorative practices",
-    image:
-      "https://images.unsplash.com/photo-1592621385612-4d7129426394?q=80&w=200&h=200&auto=format&fit=crop",
-    rating: 4.8,
-  },
-];
 
 const Landing = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<
-    ExpertCategory | "all"
-  >("all");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const filteredExperts = mockExperts.filter((expert) => {
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const response = await getAllUsers();
+        if (response.success && response.data) {
+          setUsers(response.data);
+        } else {
+          setError(response.error || "Failed to fetch users");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching users");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const displayName = user.displayName.toLowerCase();
+    const bio = user.bio?.toLowerCase() || "";
+
     const matchesSearch =
       searchTerm === "" ||
-      expert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      expert.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory =
-      selectedCategory === "all" || expert.category === selectedCategory;
+      fullName.includes(searchTerm.toLowerCase()) ||
+      displayName.includes(searchTerm.toLowerCase()) ||
+      bio.includes(searchTerm.toLowerCase());
 
     const matchesLocation =
       selectedLocation === "" ||
-      expert.location.toLowerCase().includes(selectedLocation.toLowerCase());
+      (user.location &&
+        user.location.toLowerCase().includes(selectedLocation.toLowerCase()));
 
-    return matchesSearch && matchesCategory && matchesLocation;
+    return matchesSearch && matchesLocation;
   });
 
-  const getExpertsByCategory = (category: ExpertCategory) => {
-    return mockExperts
-      .filter((expert) => expert.category === category)
-      .slice(0, 2);
-  };
+  // Get only the first 3 users for display on the landing page
+  const displayUsers = filteredUsers.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-alabaster">
@@ -221,11 +173,7 @@ const Landing = () => {
                 <select
                   className="form-input pl-10 appearance-none pr-8"
                   value={selectedCategory}
-                  onChange={(e) =>
-                    setSelectedCategory(
-                      e.target.value as ExpertCategory | "all"
-                    )
-                  }
+                  onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   <option value="all">All Categories</option>
                   <option value="fitness">Fitness Trainers</option>
@@ -238,90 +186,53 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Featured Categories */}
+      {/* Experts Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold mb-12 text-center text-gunmetal">
-            Explore Our Expert Categories
-          </h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-gunmetal">
+              Explore our FitVerse Experts
+            </h2>
+            <Link to="/experts" className="text-cambridge hover:underline">
+              View All
+            </Link>
+          </div>
 
-          {/* Category: Fitness Trainers */}
-          <div className="mb-16">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">
-                Fitness Trainers
-              </h3>
-              <Link to="#" className="text-cambridge hover:underline">
-                View All
-              </Link>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-cambridge border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+              <p className="mt-4 text-gunmetal">Loading experts...</p>
             </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-500">{error}</p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </Button>
+            </div>
+          ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getExpertsByCategory("fitness").map((expert) => (
-                <ExpertCard key={expert.id} expert={expert} />
+              {displayUsers.map((user) => (
+                <ExpertCard key={user._id} user={user} />
               ))}
+
               <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
                 <h3 className="text-xl font-semibold mb-2 text-gunmetal">
                   Looking for more options?
                 </h3>
                 <p className="text-gunmetal/70 mb-4">
-                  Discover all our certified fitness trainers
+                  Discover all our certified fitness experts
                 </p>
-                <Button variant="outline">View All Trainers</Button>
+                <Button variant="outline" onClick={() => navigate("/experts")}>
+                  View All Trainers
+                </Button>
               </div>
             </div>
-          </div>
-
-          {/* Category: Nutritionists */}
-          <div className="mb-16">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">
-                Nutritionists
-              </h3>
-              <Link to="#" className="text-cambridge hover:underline">
-                View All
-              </Link>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getExpertsByCategory("nutrition").map((expert) => (
-                <ExpertCard key={expert.id} expert={expert} />
-              ))}
-              <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-gunmetal">
-                  Need nutrition advice?
-                </h3>
-                <p className="text-gunmetal/70 mb-4">
-                  Connect with our certified nutritionists
-                </p>
-                <Button variant="outline">View All Nutritionists</Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Category: Yoga Trainers */}
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-semibold text-gunmetal">
-                Yoga Trainers
-              </h3>
-              <Link to="#" className="text-cambridge hover:underline">
-                View All
-              </Link>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getExpertsByCategory("yoga").map((expert) => (
-                <ExpertCard key={expert.id} expert={expert} />
-              ))}
-              <div className="bg-gradient-to-br from-cambridge/10 to-cambridge/5 rounded-lg p-6 flex flex-col justify-center items-center text-center border border-cambridge/20 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-gunmetal">
-                  Find inner peace
-                </h3>
-                <p className="text-gunmetal/70 mb-4">
-                  Explore our yoga and mindfulness experts
-                </p>
-                <Button variant="outline">View All Yoga Trainers</Button>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -595,43 +506,48 @@ const Landing = () => {
   );
 };
 
-const ExpertCard = ({ expert }: { expert: Expert }) => {
+const ExpertCard = ({ user }: { user: User }) => {
+  const navigate = useNavigate();
+
+  const handleViewProfile = () => {
+    navigate(`/view/${user._id}`);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-timberwolf/30 hover:shadow-lg transition-shadow">
       <div className="relative">
         <img
-          src={expert.image}
-          alt={expert.name}
+          src={
+            user.profilePhoto
+              ? `${import.meta.env.VITE_API_URL || "http://localhost:3000"}${
+                  user.profilePhoto
+                }`
+              : "/placeholder.svg"
+          }
+          alt={user.displayName}
           className="h-48 w-full object-cover"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/placeholder.svg";
+          }}
         />
-        <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-medium flex items-center shadow-sm">
-          <Star className="h-4 w-4 text-yellow-400 mr-1" fill="currentColor" />
-          {expert.rating}
-        </div>
       </div>
       <div className="p-6">
-        <div className="flex items-center mb-2">
-          <div>
-            <span className="px-2 py-1 text-xs font-medium rounded-full bg-cambridge/10 text-cambridge">
-              {expert.category === "fitness"
-                ? "Fitness Trainer"
-                : expert.category === "nutrition"
-                ? "Nutritionist"
-                : "Yoga Trainer"}
-            </span>
-          </div>
-        </div>
         <h3 className="text-xl font-semibold mb-1 text-gunmetal">
-          {expert.name}
+          {user.displayName}
         </h3>
         <div className="flex items-center text-gunmetal/60 text-sm mb-3">
           <MapPin className="h-4 w-4 mr-1" />
-          {expert.location}
+          {user.location || "Location not specified"}
         </div>
         <p className="text-gunmetal/70 text-sm mb-4 line-clamp-2">
-          {expert.description}
+          {user.bio || "No bio available"}
         </p>
-        <Button variant="outline" className="w-full">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleViewProfile}
+        >
           View Profile
         </Button>
       </div>

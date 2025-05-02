@@ -1,6 +1,8 @@
 import React from "react";
+import { updateAvailability } from "@/lib/api";
 import PersonalInfoSection from "./PersonalInfoSection";
 import ProgramDetailsSection from "./ProgramDetailsSection";
+import AvailabilitySection from "./AvailabilitySection";
 
 interface ProfileContentProps {
   activeSection: string;
@@ -13,12 +15,22 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
   user,
   refreshUser,
 }) => {
-  // Render the content based on active section (no more availability)
+  // Render the content based on active section
   switch (activeSection) {
     case "profile":
       return <PersonalInfoSection user={user} refreshUser={refreshUser} />;
     case "programs":
       return <ProgramDetailsSection />;
+    case "availability":
+      return (
+        <AvailabilitySection
+          meetLink={user?.meetLink}
+          onUpdateAvailability={async (meetLink) => {
+            await updateAvailability(meetLink);
+            refreshUser();
+          }}
+        />
+      );
     default:
       return <PersonalInfoSection user={user} refreshUser={refreshUser} />;
   }

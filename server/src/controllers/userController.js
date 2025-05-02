@@ -131,25 +131,26 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-// @desc    Update user availability
+// @desc    Update user meet link
 // @route   PATCH /api/users/availability
 // @access  Private
 const updateAvailability = async (req, res, next) => {
   try {
-    const { availability } = req.body;
+    const { meetLink } = req.body;
+    console.log(meetLink)
 
-    // Validate availability format
-    if (!availability || typeof availability !== 'object') {
+    // Validate meetLink format
+    if (!meetLink || typeof meetLink !== 'string') {
       return res.status(400).json({
         success: false,
-        error: 'Invalid availability format',
+        error: 'Invalid meet link format',
       });
     }
 
-    // Update availability for the authenticated user
+    // Update meetLink for the authenticated user
     const user = await User.findByIdAndUpdate(
       req.user._id,
-      { availability },
+      { meetLink },
       { new: true, runValidators: true }
     );
 
@@ -159,11 +160,11 @@ const updateAvailability = async (req, res, next) => {
         error: 'User not found',
       });
     }
-
+    console.log("user after upadated meetLink"+user)
     res.status(200).json({
       success: true,
-      data: user.availability,
-      message: 'Availability updated successfully',
+      data: user.meetLink,
+      message: 'Meet link updated successfully',
     });
   } catch (error) {
     next(error);
@@ -270,6 +271,23 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Public
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({}).select('-password');
+    
+    res.json({
+      success: true,
+      data: users,
+      message: 'Users retrieved successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -277,4 +295,5 @@ module.exports = {
   getUserById,
   logoutUser,
   updateUser,
+  getAllUsers,
 };
