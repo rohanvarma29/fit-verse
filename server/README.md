@@ -69,8 +69,13 @@ This is a MERN stack authentication system for the FitVerse platform.
 
 ## Environment Variables
 
-- `PORT`: Server port (default: 5000)
+- `PORT`: Server port (default: 3000)
 - `MONGO_URI`: MongoDB connection string
 - `JWT_SECRET`: Secret key for JWT token generation
 - `JWT_EXPIRES_IN`: Token expiration time (default: 30d)
-- `CLIENT_URL`: Frontend URL for CORS configuration (default: http://localhost:3000)
+- `CORS_ORIGIN`: Frontend URL for CORS configuration (default: http://localhost:8080)
+- `NODE_ENV`: Environment mode (development/production)
+- `UPLOAD_PATH`: Path for storing uploaded files (default: public/images/profile-photo/)
+- `MAX_FILE_SIZE`: Maximum file size for uploads in bytes (default: 5242880 - 5MB)
+- `RATE_LIMIT_WINDOW_MS`: Rate limiting window in milliseconds (default: 900000 - 15 minutes)
+- `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window (default: 100)

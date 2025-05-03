@@ -17,7 +17,7 @@ console.log('Serving static files from public/images at /images');
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: (process.env.CORS_ORIGIN || 'http://localhost:8080'), // Allow all origins or specify your frontend URL
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -25,8 +25,8 @@ app.use(cors({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000), // Default: 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || 100), // Default: limit each IP to 100 requests per windowMs
   message: {
     success: false,
     error: 'Too many requests, please try again later.'

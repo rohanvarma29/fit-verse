@@ -28,14 +28,31 @@ git clone https://github.com/rohanvarma29/skill-sphere-web.git
 # Step 2: Navigate to the project directory.
 cd skill-sphere-web
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Create .env files for both client and server
+# Use the .env.example files as templates
+cp .env.example .env
+cp server/.env.example server/.env
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Install the necessary dependencies for client and server
+npm i
+cd server && npm i && cd ..
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
+# In one terminal:
 npm run dev
+# In another terminal:
+cd server && npm run dev
 ```
 
-Once the development server starts, you can open your browser and navigate to `http://localhost:8080` to see the application running.
+Once the development servers start, you can open your browser and navigate to `http://localhost:8080` to see the application running.
+
+## Environment Variables
+
+### Client Environment Variables
+- `VITE_API_URL`: API base URL (default: http://localhost:3000/api)
+- `VITE_SERVER_URL`: Server URL for assets like images (default: http://localhost:3000)
+
+For server environment variables, please see the [server README](/server/README.md).
 
 ## What technologies are used for this project?
 
@@ -46,6 +63,8 @@ This project is built with:
 - React - UI framework
 - shadcn-ui - UI component library
 - Tailwind CSS - Utility-first CSS framework
+- Express - Backend framework
+- MongoDB - Database
 
 AI Tools:
 
