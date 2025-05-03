@@ -6,6 +6,7 @@ const programRoutes = require('./routes/programRoutes');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
 const app = express();
+const dotenv = require('dotenv');dotenv.config();
 
 // Middleware
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/images', express.static('public/images'));
 console.log('Serving static files from public/images at /images');
 
+console.log('Allowed CORS origin:', process.env.CORS_ORIGIN)
 // CORS configuration
 app.use(cors({
   origin: (process.env.CORS_ORIGIN || 'http://localhost:8080'), // Allow all origins or specify your frontend URL

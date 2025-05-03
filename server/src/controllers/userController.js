@@ -275,6 +275,7 @@ const updateUser = async (req, res, next) => {
 // @route   GET /api/users
 // @access  Public
 const getAllUsers = async (req, res, next) => {
+  console.log('getAllUsers called');
   try {
     const users = await User.find({}).select('-password');
     
