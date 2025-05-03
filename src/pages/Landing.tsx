@@ -100,7 +100,14 @@ const Landing = () => {
                   variant="outline"
                   className="border-purple-600 text-purple-700 hover:bg-purple-100 focus:ring-purple-500"
                   onClick={() => {
-                    navigate("/expert/67f55fbcd0a3e3de463e54b3");
+                    const userData = localStorage.getItem("user");
+                    if (userData) {
+                      const user = JSON.parse(userData);
+                      navigate(`/expert/${user.data._id}`);
+                    } else {
+                      // If no user is logged in, redirect to login page
+                      navigate("/login");
+                    }
                   }}
                 >
                   Profile View
