@@ -1,7 +1,6 @@
 const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
-const path = require('path');
-const fs = require('fs');
+const streamifier = require('streamifier');
 const dotenv = require('dotenv');
 
 // Load environment variables
@@ -23,16 +22,8 @@ cloudinary.config({
 // Get max file size from environment variables
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || 5 * 1024 * 1024); // Default: 5MB
 
-// Configure multer to use disk storage temporarily
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'tmp/uploads/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'temp-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// Configure multer to use memory storage
+const storage = multer.memoryStorage();
 
 // Create upload middleware with file filtering
 const multerUpload = multer({
@@ -50,26 +41,17 @@ const multerUpload = multer({
   }
 });
 
-// Create directory if it doesn't exist
-const tmpDir = 'tmp/uploads/';
-if (!fs.existsSync(tmpDir)) {
-  fs.mkdirSync(tmpDir, { recursive: true });
-}
-
-// Middleware to handle file upload to disk
+// Middleware to handle file upload to memory
 const handleMulterUpload = (fieldName) => {
   return multerUpload.single(fieldName);
 };
 
-// Middleware to handle Cloudinary upload
+// Middleware to handle Cloudinary upload from memory buffer
 const handleCloudinaryUpload = async (req, res, next) => {
   if (!req.file) return next();
   
-  // Store the original local file path
-  const localFilePath = req.file.path;
-  
   try {
-    console.log('Uploading file to Cloudinary:', localFilePath);
+    console.log('Uploading file to Cloudinary from memory buffer');
     
     // Ensure Cloudinary is configured before upload
     if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
@@ -80,32 +62,39 @@ const handleCloudinaryUpload = async (req, res, next) => {
       return next(new Error('Cloudinary configuration is incomplete. Check environment variables.'));
     }
     
-    // Upload file to Cloudinary
-    const result = await cloudinary.uploader.upload(localFilePath, {
-      folder: 'profile-photos',
-      transformation: [{ width: 500, height: 500, crop: 'limit' }]
+    // Create a promise to handle the stream upload
+    const uploadPromise = new Promise((resolve, reject) => {
+      // Create upload stream to Cloudinary
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'profile-photos',
+          transformation: [{ width: 500, height: 500, crop: 'limit' }]
+        },
+        (error, result) => {
+          if (error) {
+            console.error('Error uploading to Cloudinary:', error);
+            reject(error);
+          } else {
+            console.log('Cloudinary upload successful:', result.secure_url);
+            resolve(result);
+          }
+        }
+      );
+      
+      // Pipe the buffer to the upload stream
+      streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
     });
     
-    console.log('Cloudinary upload successful:', result.secure_url);
+    // Wait for the upload to complete
+    const result = await uploadPromise;
     
     // Add Cloudinary data to the request
     req.file.cloudinary = result;
     req.file.path = result.secure_url;
     
-    // Delete temporary file using the stored local path
-    if (fs.existsSync(localFilePath)) {
-      fs.unlinkSync(localFilePath);
-      console.log('Deleted temporary file:', localFilePath);
-    }
-    
     next();
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
-    // Delete temporary file if upload fails - using the original local path
-    if (req.file && localFilePath && fs.existsSync(localFilePath)) {
-      fs.unlinkSync(localFilePath);
-      console.log('Deleted temporary file after error:', localFilePath);
-    }
     next(error);
   }
 };
@@ -118,13 +107,27 @@ const upload = {
 };
 
 // Function to upload directly to Cloudinary (without multer)
-const uploadToCloudinary = async (filePath, options = {}) => {
+const uploadToCloudinary = async (buffer, options = {}) => {
   try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: 'profile-photos',
-      ...options
+    // Create a promise to handle the stream upload
+    const uploadPromise = new Promise((resolve, reject) => {
+      // Create upload stream to Cloudinary
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'profile-photos',
+          ...options
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      
+      // Pipe the buffer to the upload stream
+      streamifier.createReadStream(buffer).pipe(uploadStream);
     });
-    return result;
+    
+    return await uploadPromise;
   } catch (error) {
     throw new Error(`Failed to upload to Cloudinary: ${error.message}`);
   }

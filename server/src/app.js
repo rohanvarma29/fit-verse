@@ -12,9 +12,11 @@ const dotenv = require('dotenv');dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the public directory
-app.use('/images', express.static('public/images'));
-console.log('Serving static files from public/images at /images');
+// Conditionally serve static files from the public directory
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/images', express.static('public/images'));
+  console.log('Serving static files from public/images at /images');
+}
 
 console.log('Allowed CORS origin:', process.env.CORS_ORIGIN)
 // CORS configuration
