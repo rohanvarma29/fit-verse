@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const { deleteFromCloudinary, getPublicIdFromUrl } = require('../middleware/cloudinaryMiddleware');
 
 // Generate JWT token
 const generateToken = (id) => {
@@ -49,7 +50,7 @@ const registerUser = async (req, res, next) => {
     const user = await User.create({
       firstName,
       lastName,
-      profilePhoto: req.file ? `/images/profile-photo/${req.file.filename}` : null,
+      profilePhoto: req.file ? req.file.path : null, // Cloudinary returns the URL in req.file.path
       email,
       password,
       displayName,
@@ -237,7 +238,22 @@ const updateUser = async (req, res, next) => {
       user.socialMedia = req.body.socialMedia || user.socialMedia;
 
       if (req.file) {
-        user.profilePhoto = `/images/profile-photo/${req.file.filename}`;
+        // If user already has a profile photo, delete the old one from Cloudinary
+        if (user.profilePhoto) {
+          try {
+            const publicId = getPublicIdFromUrl(user.profilePhoto);
+            if (publicId) {
+              await deleteFromCloudinary(publicId);
+              console.log('Deleted old profile photo from Cloudinary');
+            }
+          } catch (error) {
+            console.error('Error deleting old profile photo:', error);
+            // Continue with the update even if deletion fails
+          }
+        }
+        
+        // Update with new Cloudinary URL
+        user.profilePhoto = req.file.path;
         console.log('Updated profile photo:', user.profilePhoto);
       }
 

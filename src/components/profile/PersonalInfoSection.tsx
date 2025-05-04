@@ -118,7 +118,8 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
                 {profilePhotoPreview ? (
                   <AvatarImage
                     src={
-                      profilePhotoPreview.startsWith("blob:")
+                      profilePhotoPreview.startsWith("blob:") ||
+                      profilePhotoPreview.startsWith("http")
                         ? profilePhotoPreview
                         : `http://localhost:3000${profilePhotoPreview}`
                     }
@@ -127,7 +128,11 @@ const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
                   />
                 ) : user.profilePhoto ? (
                   <AvatarImage
-                    src={`http://localhost:3000${user.profilePhoto}`}
+                    src={
+                      user.profilePhoto.startsWith("http")
+                        ? user.profilePhoto
+                        : `http://localhost:3000${user.profilePhoto}`
+                    }
                     alt={user.displayName}
                     className="object-cover"
                   />

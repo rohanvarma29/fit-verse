@@ -2,7 +2,7 @@ const express = require('express');
 const { check } = require('express-validator');
 const { registerUser, loginUser, updateAvailability, getUserById, logoutUser, updateUser, getAllUsers } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
-const upload = require('../middleware/uploadMiddleware');
+const { upload } = require('../middleware/cloudinaryMiddleware');
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const router = express.Router();
 // Register User
 router.post(
   '/register',
-  upload.single('profilePhoto'),
+  ...upload.single('profilePhoto'),
   [
     check('firstName', 'First name is required').notEmpty(),
     check('lastName', 'Last name is required').notEmpty(),
@@ -43,7 +43,11 @@ router.get('/:id', getUserById);
 router.post('/logout', logoutUser);
 
 // Update User
-router.post('/update', protect, upload.single('profilePhoto'), updateUser);
+router.post('/update',
+  protect,
+  ...upload.single('profilePhoto'),
+  updateUser
+);
 
 module.exports = router;
 

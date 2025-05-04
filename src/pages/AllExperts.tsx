@@ -172,11 +172,11 @@ const ExpertCard = ({ user }: { user: User }) => {
       <div className="relative">
         <img
           src={
-            user.profilePhoto
-              ? `${import.meta.env.VITE_SERVER_URL || "http://localhost:3000"}${
+            user.profilePhoto.startsWith("http")
+              ? user.profilePhoto
+              : `${import.meta.env.VITE_SERVER_URL || "http://localhost:3000"}${
                   user.profilePhoto
                 }`
-              : "/placeholder.svg"
           }
           alt={user.displayName}
           className="h-48 w-full object-cover"

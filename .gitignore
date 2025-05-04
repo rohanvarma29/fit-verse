@@ -15,6 +15,7 @@ client/.vite/
 
 # Backend (Express)
 server/dist/
+server/tmp/
 
 # VSCode & IDEs
 .vscode/
