@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { getUserById } from "@/lib/api";
+import { getUserById, getProgramsByExpertId } from "@/lib/api";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Instagram } from "lucide-react";
@@ -13,6 +13,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -54,56 +65,24 @@ interface User {
   meetLink?: string;
 }
 
-// Dummy program data
 interface Program {
-  id: string;
-  title: string;
-  description: string;
-  duration: string;
-  price: string;
-  sessions: number;
+  _id: string;
+  programName: string;
+  programDescription: string;
+  programDuration: string;
+  programPrice: string;
+  createdAt: string;
+  updatedAt: string;
 }
-
-const dummyPrograms: Program[] = [
-  {
-    id: "1",
-    title: "ALIGN : Transformation Program",
-    description: "My signature program to massively up-level your life",
-    duration: "8 weeks",
-    price: "$3,150",
-    sessions: 20,
-  },
-  {
-    id: "2",
-    title: "Clarity Call : Free Initial Consultation",
-    description: "Get to know if my Coaching Program is the right fit for you",
-    duration: "20 mins",
-    price: "Free",
-    sessions: 1,
-  },
-  {
-    id: "3",
-    title: "10 Additional Sessions (Package)",
-    description: "Package of 10 more sessions to add to your program",
-    duration: "Flexible",
-    price: "$2,500",
-    sessions: 10,
-  },
-  {
-    id: "4",
-    title: "5 Additional Sessions (Package)",
-    description: "Package of 5 more sessions to add to your program",
-    duration: "Flexible",
-    price: "$1,350",
-    sessions: 5,
-  },
-];
 
 const ProfileDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User | null>(null);
+  const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -128,6 +107,30 @@ const ProfileDetail = () => {
     };
 
     fetchUser();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      if (!id) return;
+
+      try {
+        const response = await getProgramsByExpertId(id);
+
+        if (response.success && response.data) {
+          console.log("Fetched programs:", response.data);
+          setPrograms(response.data);
+        } else {
+          setError(response.error || "Failed to fetch programs");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching programs");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
   }, [id]);
 
   useEffect(() => {
@@ -165,6 +168,10 @@ const ProfileDetail = () => {
         url: user.meetLink,
       });
     }
+  };
+
+  const handleCloseDetailsDialog = () => {
+    setIsDetailsDialogOpen(false);
   };
 
   return (
@@ -273,57 +280,71 @@ const ProfileDetail = () => {
                   </h2>
 
                   <div className="mb-8">
-                    <Carousel className="w-full">
-                      <CarouselContent>
-                        {dummyPrograms.map((program) => (
-                          <CarouselItem
-                            key={program.id}
-                            className="md:basis-1/2 lg:basis-1/2"
-                          >
-                            <Card className="h-full border border-gray-200">
-                              <CardHeader className="pb-2">
-                                <CardTitle className="text-xl">
-                                  {program.title}
-                                </CardTitle>
-                                <CardDescription>
-                                  {program.description}
-                                </CardDescription>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="flex justify-between mb-2">
-                                  <span className="text-sm text-gray-500">
-                                    Duration:
-                                  </span>
-                                  <span className="text-sm font-medium">
-                                    {program.duration}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between mb-2">
-                                  <span className="text-sm text-gray-500">
-                                    Sessions:
-                                  </span>
-                                  <span className="text-sm font-medium">
-                                    x {program.sessions}
-                                  </span>
-                                </div>
-                              </CardContent>
-                              <CardFooter className="flex justify-between border-t pt-4">
-                                <span className="font-bold text-lg">
-                                  {program.price}
-                                </span>
-                                <Button variant="outline" size="sm">
-                                  View Details
-                                </Button>
-                              </CardFooter>
-                            </Card>
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <div className="flex justify-end gap-2 mt-4">
-                        <CarouselPrevious className="static translate-y-0 translate-x-0 position-relative" />
-                        <CarouselNext className="static translate-y-0 translate-x-0 position-relative" />
+                    {programs.length > 0 ? (
+                      <>
+                        <Carousel className="w-full">
+                          <CarouselContent>
+                            {programs.map((program) => (
+                              <CarouselItem
+                                key={program._id}
+                                className="md:basis-1/2 lg:basis-1/2"
+                              >
+                                <Card className="h-full border border-gray-200">
+                                  <CardHeader className="pb-2">
+                                    <CardTitle className="text-xl">
+                                      {program.programName}
+                                    </CardTitle>
+                                    <CardDescription className="overflow-hidden text-ellipsis whitespace-nowrap">
+                                      {program.programDescription.length > 100
+                                        ? program.programDescription.substring(
+                                            0,
+                                            100
+                                          ) + "..."
+                                        : program.programDescription}
+                                    </CardDescription>
+                                  </CardHeader>
+                                  <CardContent>
+                                    <div className="flex justify-between mb-2">
+                                      <span className="text-sm text-gray-500">
+                                        Duration:
+                                      </span>
+                                      <span className="text-sm font-medium">
+                                        {program.programDuration}
+                                      </span>
+                                    </div>
+                                  </CardContent>
+                                  <CardFooter className="flex justify-between border-t pt-4">
+                                    <span className="font-bold text-lg">
+                                      {program.programPrice}
+                                    </span>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => {
+                                        setSelectedProgram(program);
+                                        setIsDetailsDialogOpen(true);
+                                      }}
+                                    >
+                                      View Details
+                                    </Button>
+                                  </CardFooter>
+                                </Card>
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                          <div className="flex justify-end gap-2 mt-4">
+                            <CarouselPrevious className="static translate-y-0 translate-x-0 position-relative" />
+                            <CarouselNext className="static translate-y-0 translate-x-0 position-relative" />
+                          </div>
+                        </Carousel>
+                      </>
+                    ) : (
+                      <div className="text-center py-8">
+                        <p className="text-timberwolf">
+                          No programs available for this expert yet.
+                        </p>
                       </div>
-                    </Carousel>
+                    )}
                   </div>
 
                   <div className="mt-8 pt-6 border-t">
@@ -365,7 +386,92 @@ const ProfileDetail = () => {
           )
         )}
       </div>
+      <ProgramDetailsDialog
+        program={selectedProgram}
+        open={isDetailsDialogOpen}
+        onClose={handleCloseDetailsDialog}
+      />
     </div>
+  );
+};
+
+interface ProgramDetailsDialogProps {
+  program: Program | null;
+  open: boolean;
+  onClose: () => void;
+}
+
+const ProgramDetailsDialog: React.FC<ProgramDetailsDialogProps> = ({
+  program,
+  open,
+  onClose,
+}) => {
+  if (!program) {
+    return null;
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh]">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">{program.programName}</DialogTitle>
+          <DialogDescription>Program details</DialogDescription>
+        </DialogHeader>
+        <div className="overflow-y-auto pr-2 max-h-[50vh]">
+          <div className="space-y-4 py-4">
+            <div>
+              <h4 className="text-sm font-medium text-gray-500 mb-1">
+                Description
+              </h4>
+              <p className="text-gunmetal whitespace-pre-wrap">
+                {program.programDescription}
+              </p>
+            </div>
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Duration
+                </h4>
+                <p className="text-gunmetal">{program.programDuration}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Price
+                </h4>
+                <p className="text-gunmetal font-bold">
+                  {program.programPrice}
+                </p>
+              </div>
+            </div>
+            {program.createdAt && (
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Created
+                </h4>
+                <p className="text-gunmetal">
+                  {new Date(program.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            )}
+            {program.updatedAt && (
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Last Updated
+                </h4>
+                <p className="text-gunmetal">
+                  {new Date(program.updatedAt).toLocaleDateString()}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

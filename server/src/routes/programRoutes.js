@@ -24,6 +24,9 @@ router.post(
   createProgram
 );
 
+// Get Programs by Expert ID
+router.get('/expert/:id', getProgramsByExpertId);
+
 // Get Program by ID
 router.get('/:id', getProgramById);
 
@@ -32,8 +35,5 @@ router.put('/:id', protect, updateProgram);
 
 // Delete Program
 router.delete('/:id', protect, deleteProgram);
-
-// Get Programs by Expert ID
-router.get('/expert/:id', getProgramsByExpertId);
 
 module.exports = router;

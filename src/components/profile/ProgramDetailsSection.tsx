@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CalendarPlus, Plus } from "lucide-react";
+import { CalendarPlus, Plus, Edit, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -55,6 +55,7 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [formData, setFormData] = useState({
     programName: "",
@@ -168,7 +169,7 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
       <Card key={program._id} className="h-full border border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-xl">{program.programName}</CardTitle>
-          <CardDescription className="overflow-hidden text-ellipsis">
+          <CardDescription className="overflow-hidden text-ellipsis whitespace-nowrap">
             {program.programDescription}
           </CardDescription>
         </CardHeader>
@@ -187,6 +188,16 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
               variant="outline"
               size="sm"
               onClick={() => {
+                setSelectedProgram(program);
+                setIsDetailsDialogOpen(true);
+              }}
+            >
+              View
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
                 // Open the edit dialog and populate it with the program's data
                 setFormData({
                   programName: program.programName,
@@ -198,7 +209,7 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
                 setIsEditDialogOpen(true);
               }}
             >
-              Edit
+              <Edit className="h-4 w-4 mr-2" aria-label="Edit" />
             </Button>
             <Button
               variant="destructive"
@@ -236,7 +247,7 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
                 }
               }}
             >
-              Delete
+              <Trash2 className="h-4 w-4 mr-2" aria-label="Delete" />
             </Button>
           </div>
         </CardFooter>
@@ -540,6 +551,76 @@ const ProgramDetailsSection: React.FC<ProgramDetailsSectionProps> = ({
               <Button type="submit">Update Program</Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Program Details Dialog */}
+      <Dialog open={isDetailsDialogOpen} onOpenChange={setIsDetailsDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {selectedProgram?.programName}
+            </DialogTitle>
+            <DialogDescription>Program details</DialogDescription>
+          </DialogHeader>
+          <div className="overflow-y-auto pr-2 max-h-[50vh]">
+            <div className="space-y-4 py-4">
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Description
+                </h4>
+                <p className="text-gunmetal whitespace-pre-wrap">
+                  {selectedProgram?.programDescription}
+                </p>
+              </div>
+              <div className="flex justify-between items-center">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">
+                    Duration
+                  </h4>
+                  <p className="text-gunmetal">
+                    {selectedProgram?.programDuration}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">
+                    Price
+                  </h4>
+                  <p className="text-gunmetal font-bold">
+                    {selectedProgram?.programPrice}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Created
+                </h4>
+                <p className="text-gunmetal">
+                  {selectedProgram
+                    ? new Date(selectedProgram.createdAt).toLocaleDateString()
+                    : ""}
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">
+                  Last Updated
+                </h4>
+                <p className="text-gunmetal">
+                  {selectedProgram
+                    ? new Date(selectedProgram.updatedAt).toLocaleDateString()
+                    : ""}
+                </p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDetailsDialogOpen(false)}
+            >
+              Close
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
