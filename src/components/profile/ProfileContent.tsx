@@ -20,7 +20,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({
     case "profile":
       return <PersonalInfoSection user={user} refreshUser={refreshUser} />;
     case "programs":
-      return <ProgramDetailsSection />;
+      return <ProgramDetailsSection user={user} refreshUser={refreshUser} />;
     case "availability":
       return (
         <AvailabilitySection

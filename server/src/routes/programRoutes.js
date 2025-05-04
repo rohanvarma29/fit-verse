@@ -5,6 +5,7 @@ const {
   getProgramById,
   updateProgram,
   deleteProgram,
+  getProgramsByExpertId,
 } = require('../controllers/programController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -15,6 +16,7 @@ router.post(
   '/',
   protect,
   [
+    check('programName', 'Program name is required').notEmpty(),
     check('programDescription', 'Program description is required').notEmpty(),
     check('programDuration', 'Program duration is required').notEmpty(),
     check('programPrice', 'Program price is required').notEmpty(),
@@ -30,5 +32,8 @@ router.put('/:id', protect, updateProgram);
 
 // Delete Program
 router.delete('/:id', protect, deleteProgram);
+
+// Get Programs by Expert ID
+router.get('/expert/:id', getProgramsByExpertId);
 
 module.exports = router;

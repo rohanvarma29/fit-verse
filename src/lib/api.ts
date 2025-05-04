@@ -244,3 +244,188 @@ export const updateAvailability = async (meetLink: string) => {
     };
   }
 };
+
+export const createProgram = async (programData: {
+  programName: string;
+  programDescription: string;
+  programDuration: string;
+  programPrice: string;
+  faqs?: Array<{ question: string; answer: string }>;
+}) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${API_BASE_URL}/programs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(programData),
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while creating program';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};
+
+export const getProgramsByExpertId = async (expertId: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/programs/expert/${expertId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while fetching programs';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+      
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};
+
+export const updateProgram = async (
+  programId: string,
+  programData: {
+    programName: string;
+    programDescription: string;
+    programDuration: string;
+    programPrice: string;
+    faqs?: Array<{ question: string; answer: string }>;
+  }
+) => {
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}/programs/${programId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(programData),
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while updating program';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};
+
+export const deleteProgram = async (programId: string) => {
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}/programs/${programId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      let errorMessage = 'An error occurred while deleting program';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = response.statusText || errorMessage;
+      }
+
+      return {
+        success: false,
+        error: errorMessage,
+        data: null
+      };
+    }
+
+    return {
+      success: true,
+      data: null,
+      error: null
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error or server is unavailable',
+      data: null
+    };
+  }
+};

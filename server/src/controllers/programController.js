@@ -6,7 +6,7 @@ const { validationResult } = require('express-validator');
 // @access  Private
 const createProgram = async (req, res, next) => {
   try {
-    const { programDescription, programDuration, programPrice, programHighlights, faqs } = req.body;
+    const { programName, programDescription, programDuration, programPrice, faqs } = req.body;
 
     // Validate request body
     const errors = validationResult(req);
@@ -20,10 +20,10 @@ const createProgram = async (req, res, next) => {
     // Create a new program
     const program = await Program.create({
       expert: req.user._id,
+      programName,
       programDescription,
       programDuration,
       programPrice,
-      programHighlights,
       faqs,
     });
 
@@ -65,7 +65,7 @@ const getProgramById = async (req, res, next) => {
 // @access  Private
 const updateProgram = async (req, res, next) => {
   try {
-    const { programDescription, programDuration, programPrice, programHighlights, faqs } = req.body;
+    const { programName, programDescription, programDuration, programPrice, faqs } = req.body;
 
     const program = await Program.findById(req.params.id);
 
@@ -85,10 +85,10 @@ const updateProgram = async (req, res, next) => {
     }
 
     // Update fields
+    program.programName = programName || program.programName;
     program.programDescription = programDescription || program.programDescription;
     program.programDuration = programDuration || program.programDuration;
     program.programPrice = programPrice || program.programPrice;
-    program.programHighlights = programHighlights || program.programHighlights;
     program.faqs = faqs || program.faqs;
 
     const updatedProgram = await program.save();
@@ -125,11 +125,27 @@ const deleteProgram = async (req, res, next) => {
       });
     }
 
-    await program.remove();
+    await Program.deleteOne({ _id: program._id });
 
     res.status(200).json({
       success: true,
       message: 'Program deleted successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get programs by expert ID
+// @route   GET /api/programs/expert/:id
+// @access  Public
+const getProgramsByExpertId = async (req, res, next) => {
+  try {
+    const programs = await Program.find({ expert: req.params.id });
+
+    res.status(200).json({
+      success: true,
+      data: programs,
     });
   } catch (error) {
     next(error);
@@ -141,4 +157,5 @@ module.exports = {
   getProgramById,
   updateProgram,
   deleteProgram,
+  getProgramsByExpertId,
 };

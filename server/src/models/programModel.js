@@ -26,8 +26,9 @@ const programSchema = new mongoose.Schema({
     required: [true, 'Program price is required'],
     trim: true,
   },
-  programHighlights: {
+  programName: {
     type: String,
+    required: [true, 'Program name is required'],
     trim: true,
   },
   faqs: [faqSchema],
