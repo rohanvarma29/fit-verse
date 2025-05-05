@@ -114,7 +114,7 @@ sequenceDiagram
 ## 10. Links & Assets
 
 - **Live Site**: <https://fit-verse-bay.vercel.app/>
-- **GitHub**: <https://https://github.com/rohanvarma29/fit-verse>
+- **GitHub**: <https://github.com/rohanvarma29/fit-verse>
 - **Architecture Diagram**: `/public/architecture.jpeg` (see repo)
 
 ---

@@ -139,9 +139,3 @@ The project is configured for deployment on Vercel:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Project Status
-
-Active development - Regular updates and new features being added.
-
-For more information, visit [Lovable](https://lovable.dev/projects/43f01f5d-2b08-484a-8e29-6acafcb5cc96).
