@@ -1,4 +1,4 @@
-# FitVerse Authentication System
+# FitVerse Server
 
 This is a MERN stack authentication system for the FitVerse platform.
 
@@ -29,7 +29,7 @@ This is a MERN stack authentication system for the FitVerse platform.
 ### Program Routes
 
 - **Create Program**: `POST /api/programs`
-  - Required fields: programDescription, programDuration, programPrice
+  - Required fields: programName, programDescription, programDuration, programPrice
   - Optional: programHighlights, FAQs
   - Associates the program with the logged-in user
 
@@ -79,3 +79,6 @@ This is a MERN stack authentication system for the FitVerse platform.
 - `MAX_FILE_SIZE`: Maximum file size for uploads in bytes (default: 5242880 - 5MB)
 - `RATE_LIMIT_WINDOW_MS`: Rate limiting window in milliseconds (default: 900000 - 15 minutes)
 - `RATE_LIMIT_MAX_REQUESTS`: Maximum requests per window (default: 100)
+- `CLOUDINARY_CLOUD_NAME`: Cloudinary cloud name for image uploads
+- `CLOUDINARY_API_KEY`: Cloudinary API key
+- `CLOUDINARY_API_SECRET`: Cloudinary API secret key
